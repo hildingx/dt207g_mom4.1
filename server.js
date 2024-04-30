@@ -6,11 +6,14 @@
 const express = require("express");
 const authRoutes = require("./routes/authRoutes");
 const jwt = require("jsonwebtoken");
+const cors = require('cors');
 require("dotenv").config();
 
 //Init express
 const app = express();
 const port = process.env.PORT || 3000;
+
+app.use(cors());
 
 //För att tolka JSON-formaterad inkommande anropskropp
 app.use(express.json());
@@ -39,5 +42,5 @@ function authenticateToken(req, res, next) {
 
 //Starta applikation
 app.listen(port, () => {
-    console.log(`Server running att http://localhost:${port}`);
+    console.log(`Server running on MongoDB at collection ${process.env.MONGO_URI.split('/').pop()}`);
 });
