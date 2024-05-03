@@ -14,7 +14,7 @@ mongoose.connect(process.env.MONGO_URI)
 .then(() => console.log("Ansluten till MongoDB Atlas"))
 .catch(err => console.error("Kunde inte ansluta till MongoDB", err));
 
-//Användarmodel
+//Användarmodell
 const User = require("../models/user.js");
 
 //Lägg till ny användare

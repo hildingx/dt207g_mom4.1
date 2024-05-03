@@ -9,12 +9,14 @@ const jwt = require("jsonwebtoken");
 const cors = require('cors');
 require("dotenv").config();
 
+//Användarmodell
 const User = require("./models/user.js");
 
 //Init express
 const app = express();
 const port = process.env.PORT || 3000;
 
+//Aktivera CORS för alla domäner
 app.use(cors());
 
 //För att tolka JSON-formaterad inkommande anropskropp
@@ -28,7 +30,7 @@ app.get("/api/protected", authenticateToken, (req, res) => {
     res.json({ message: "Skyddad route. " });
 });
 
-// Validera token
+//Middleware för att validera token
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
@@ -38,6 +40,7 @@ function authenticateToken(req, res, next) {
     jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decodedToken) => {
         if (err) return res.status(403).json({ message: "Invalid JWT. "});
 
+        //Om token giltig, extrahera användarnamnet från den dekrypterade tokenen
         req.username = decodedToken.username; // Spara användarnamnet från decodedToken
         next();
     });
