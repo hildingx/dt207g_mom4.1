@@ -17,6 +17,7 @@ mongoose.connect(process.env.MONGO_URI)
 //Användarmodel
 const User = require("../models/user.js");
 
+const authenticateToken = require("../server").app.locals.authenticateToken;
 
 //Lägg till ny användare
 router.post("/register", async (req, res) => {
@@ -76,6 +77,27 @@ router.post("/login", async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Server error during login." });
+    }
+});
+
+//Rouite för att hämta användardata
+router.get("/userdata", authenticateToken, async (req, res) => {
+    try {
+        //Hämta användardata från databasen baserat på inloggad användares användarnamn
+        const user = await User.findOne({ username: req.username });
+
+        if (!user) {
+            return res.status(404).json({ error: "Användare hittades inte." });
+        }
+
+        //Skicka tillbaka användardata som svar
+        res.json({
+            firstname: user.firstname,
+            lastname: user.lastname
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Serverfel vid hämtning av användardata." });
     }
 });
 

@@ -18,6 +18,9 @@ app.use(cors());
 //För att tolka JSON-formaterad inkommande anropskropp
 app.use(express.json());
 
+//Exportera funktion för att autentisera token
+app.locals.authenticateToken = authenticateToken;
+
 //Routes
 app.use("/api", authRoutes);
 
