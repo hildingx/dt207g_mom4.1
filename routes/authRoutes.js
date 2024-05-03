@@ -78,25 +78,4 @@ router.post("/login", async (req, res) => {
     }
 });
 
-//Rouite för att hämta användardata
-router.get("/userdata", async (req, res) => {
-    try {
-        //Hämta användardata från databasen baserat på inloggad användares användarnamn
-        const user = await User.findOne({ username: req.username });
-
-        if (!user) {
-            return res.status(404).json({ error: "Användare hittades inte." });
-        }
-
-        //Skicka tillbaka användardata som svar
-        res.json({
-            firstname: user.firstname,
-            lastname: user.lastname
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Serverfel vid hämtning av användardata." });
-    }
-});
-
 module.exports = router;

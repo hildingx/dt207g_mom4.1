@@ -9,6 +9,8 @@ const jwt = require("jsonwebtoken");
 const cors = require('cors');
 require("dotenv").config();
 
+const User = require("./models/user.js");
+
 //Init express
 const app = express();
 const port = process.env.PORT || 3000;
@@ -39,6 +41,27 @@ function authenticateToken(req, res, next) {
         next();
     });
 }
+
+//Rouite för att hämta användardata
+app.get("/userdata", authenticateToken, async (req, res) => {
+    try {
+        //Hämta användardata från databasen baserat på inloggad användares användarnamn
+        const user = await User.findOne({ username: req.username });
+
+        if (!user) {
+            return res.status(404).json({ error: "Användare hittades inte." });
+        }
+
+        //Skicka tillbaka användardata som svar
+        res.json({
+            firstname: user.firstname,
+            lastname: user.lastname
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Serverfel vid hämtning av användardata." });
+    }
+});
 
 //Starta applikation
 app.listen(port, () => {
