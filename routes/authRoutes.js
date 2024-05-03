@@ -17,8 +17,6 @@ mongoose.connect(process.env.MONGO_URI)
 //Användarmodel
 const User = require("../models/user.js");
 
-const authenticateToken = require("../server.js").app.locals.authenticateToken;
-
 //Lägg till ny användare
 router.post("/register", async (req, res) => {
     try {
@@ -81,7 +79,7 @@ router.post("/login", async (req, res) => {
 });
 
 //Rouite för att hämta användardata
-router.get("/userdata", authenticateToken, async (req, res) => {
+router.get("/userdata", async (req, res) => {
     try {
         //Hämta användardata från databasen baserat på inloggad användares användarnamn
         const user = await User.findOne({ username: req.username });
