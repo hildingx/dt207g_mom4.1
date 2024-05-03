@@ -28,22 +28,23 @@ app.get("/api/protected", authenticateToken, (req, res) => {
     res.json({ message: "Skyddad route. " });
 });
 
-//Validera token
+// Validera token
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
-    if(token == null) res.status(401).json({ message: "Not authorized for this route. Token missing. "});
-    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, username) => {
-        if(err) return res.status(403).json({ message: "Invalid JWT. "});
+    if (token == null) return res.status(401).json({ message: "Not authorized for this route. Token missing. "});
 
-        req.username = username;
+    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decodedToken) => {
+        if (err) return res.status(403).json({ message: "Invalid JWT. "});
+
+        req.username = decodedToken.username; // Spara användarnamnet från decodedToken
         next();
     });
 }
 
 //Rouite för att hämta användardata
-app.get("/userdata", authenticateToken, async (req, res) => {
+app.get("/api/userdata", authenticateToken, async (req, res) => {
     try {
         //Hämta användardata från databasen baserat på inloggad användares användarnamn
         const user = await User.findOne({ username: req.username });
