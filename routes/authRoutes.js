@@ -17,7 +17,7 @@ mongoose.connect(process.env.MONGO_URI)
 //Användarmodel
 const User = require("../models/user.js");
 
-const authenticateToken = require("../server").app.locals.authenticateToken;
+const authenticateToken = require("../server.js").app.locals.authenticateToken;
 
 //Lägg till ny användare
 router.post("/register", async (req, res) => {
