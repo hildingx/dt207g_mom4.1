@@ -44,8 +44,8 @@ Såhär når du API'et:
 ### Exempel på JSON-objekt för användarregistrering:
 
 `{
-    "username": "alexander",
-    "password": "SuperSäkert123!",
-    "firstname": "Alexander",
-    "lastname": "Hilding"
+   "username": "alexander",
+   "password": "SuperSäkert123!",
+   "firstname": "Alexander",
+   "lastname": "Hilding" 
 }`
