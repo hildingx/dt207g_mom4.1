@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const xss = require('xss');
 
 //Användarschema
 const userSchema = new mongoose.Schema({
@@ -35,10 +34,6 @@ userSchema.pre('save', async function(next) {
             const hashedPassword = await bcrypt.hash(this.password, 10);
             this.password = hashedPassword;
         }
-        //Tillämpa XSS-sanering
-        this.username = xss(this.username);
-        this.firstname = xss(this.firstname);
-        this.lastname = xss(this.lastname);
 
         next();
 

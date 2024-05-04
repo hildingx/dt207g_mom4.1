@@ -6,6 +6,7 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
+const xss = require('xss');
 require("dotenv").config();
 
 //Ansluta till MongoDB
@@ -36,8 +37,13 @@ router.post("/register", async (req, res) => {
             return res.status(400).json({ error: "Last name is required." });
         }
 
+        //Tillämpa XSS-sanering
+        const sanitizedUsername = xss(username);
+        const sanitizedFirstname = xss(firstname);
+        const sanitizedLastname = xss(lastname);
+
         //Rätt angivet - spara användare
-        const user = new User({ username, password, firstname, lastname });
+        const user = new User({ sanitizedUsername, password, sanitizedFirstname, sanitizedLastname });
         await user.save();
         res.status(201).json({ message: "User created successfully." });
 
@@ -46,6 +52,8 @@ router.post("/register", async (req, res) => {
         res.status(500).json({ error: "Failed to register user due to an internal server error." });
     }
 });
+
+
 
 //Login användare
 router.post("/login", async (req, res) => {
