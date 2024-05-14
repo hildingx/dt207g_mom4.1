@@ -42,8 +42,12 @@ router.post("/register", async (req, res) => {
         const sanitizedFirstname = xss(firstname);
         const sanitizedLastname = xss(lastname);
 
-        //Rätt angivet - spara användare
-        const user = new User({ sanitizedUsername, password, sanitizedFirstname, sanitizedLastname });
+        const user = new User({
+            username: sanitizedUsername,
+            password: password,
+            firstname: sanitizedFirstname,
+            lastname: sanitizedLastname
+        });
         await user.save();
         res.status(201).json({ message: "User created successfully." });
 
